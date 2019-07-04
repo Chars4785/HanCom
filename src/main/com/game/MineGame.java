@@ -17,9 +17,6 @@ import main.com.show.GameChooseUI;
 
 public class MineGame implements KeyListener {
 
-	static final int WORD_COUNT = 27; // 기본 단어 갯수
-	static int wordCount = 27;
-
 	LinkedList<JLabel> words;
 	CheckTheGameEnd total_play_time; // 전체 플레이타임
 
@@ -32,13 +29,14 @@ public class MineGame implements KeyListener {
 
 	public MineGame(int gameTime) {
 		this.gameTime = gameTime;
-
+		
 		words = new LinkedList<JLabel>();
-		total_play_time = new CheckTheGameEnd(this.gameTime, wordCount);
 		word_create = new Word();
 		inputText = new JTextField(2);
 		icon = new ImageIcon("img/backgroundMine.jpg");
 
+		total_play_time = new CheckTheGameEnd(this.gameTime, this.words);
+		
 		minePanel = new JPanel() {
 			public void paintComponent(Graphics g) {
 
@@ -49,17 +47,12 @@ public class MineGame implements KeyListener {
 			}
 		};
 
-		showUI();
-	}
-
-	public void showUI() {
-
 		inputText.addKeyListener(this);
 		inputText.setBounds(350, 490, 100, 30);
 		inputText.setOpaque(true);
 		inputText.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-		for (int i = 0; i < WORD_COUNT; i++) {
+		for (int i = 0; i < word_create.words.size(); i++) {
 			JLabel tmp = new JLabel(word_create.words.get(i));
 
 			tmp.setFont(new Font("굴림", Font.BOLD, 12));
@@ -92,7 +85,6 @@ public class MineGame implements KeyListener {
 		GameChooseUI.mainFrame.setVisible(true);
 
 		total_play_time.start();
-
 	}
 
 	@Override
@@ -107,7 +99,7 @@ public class MineGame implements KeyListener {
 				if (noSpaceInputText.equals(words.get(i).getText())) {
 					words.get(i).setVisible(false);
 					words.remove(i);
-					GameChooseUI.SCORE++;
+					GameChooseUI.GAMESCORE++;
 				}
 			}
 

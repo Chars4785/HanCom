@@ -17,7 +17,7 @@ public class MineGameUIPanel extends GameUI implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startButton) {
-			mineUI.setVisible(false); // 현재 Panel 지워주고
+			GameChooseUI.mainFrame.remove(super.mainUIPanel);
 			new MineGame(gameTime);
 		}
 
@@ -25,26 +25,20 @@ public class MineGameUIPanel extends GameUI implements ActionListener {
 			lowButton.setIcon(lowIconClick);
 			midButton.setIcon(midIcon);
 			highButton.setIcon(highIcon);
-
-			// 난이도 설정
 			gameTime = 120;
 		}
 
 		if (e.getSource() == midButton) {
-			midButton.setIcon(midIconClick);
 			lowButton.setIcon(lowIcon);
+			midButton.setIcon(midIconClick);			
 			highButton.setIcon(highIcon);
-
-			// 난이도 설정
 			gameTime = 60;
 		}
 
 		if (e.getSource() == highButton) {
-			highButton.setIcon(highIconClick);
 			lowButton.setIcon(lowIcon);
 			midButton.setIcon(midIcon);
-
-			// 난이도 설정
+			highButton.setIcon(highIconClick);
 			gameTime = 30;
 		}
 

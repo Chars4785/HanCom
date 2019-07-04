@@ -8,7 +8,8 @@ import main.com.game.RainGame;
 public class RainGameUIPanel extends GameUI implements ActionListener {
 
 	static String backGround = "background";
-	int gameTime = 120;
+	int gameTime = 240;
+	
 	public RainGameUIPanel() {
 		super(backGround);
 		super.showUI(this);
@@ -17,7 +18,7 @@ public class RainGameUIPanel extends GameUI implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startButton) {
-			mineUI.setVisible(false); // 현재 Panel 지워주고
+			GameChooseUI.mainFrame.remove(super.mainUIPanel);
 			new RainGame(gameTime);
 		}
 
@@ -25,27 +26,21 @@ public class RainGameUIPanel extends GameUI implements ActionListener {
 			lowButton.setIcon(lowIconClick);
 			midButton.setIcon(midIcon);
 			highButton.setIcon(highIcon);
-
-			// 난이도 설정
-			gameTime = 120;
+			gameTime = 240;
 		}
 
 		if (e.getSource() == midButton) {
-			midButton.setIcon(midIconClick);
 			lowButton.setIcon(lowIcon);
+			midButton.setIcon(midIconClick);			
 			highButton.setIcon(highIcon);
-
-			// 난이도 설정
-			gameTime = 60;
+			gameTime = 120;
 		}
 
 		if (e.getSource() == highButton) {
-			highButton.setIcon(highIconClick);
 			lowButton.setIcon(lowIcon);
 			midButton.setIcon(midIcon);
-
-			// 난이도 설정
-			gameTime = 30;
+			highButton.setIcon(highIconClick);
+			gameTime = 60;
 		}
 
 	}
