@@ -1,49 +1,43 @@
 package main.com.game;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.util.LinkedList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import main.com.show.GameChooseUI;
 
 public class Rain extends Thread {
-	public static LinkedList<JLabel> words = new LinkedList<>();
-	public static int[] randomMove = new int[50];
 
-	Word word_creat;
-	JPanel rainPanel;
-	ImageIcon lifeIcon;
 	CheckTheGameEnd playTime;
+	LinkedList<JLabel> words;
+	LinkedList<Integer> randomMove;
 
-	public Rain(JPanel rainPanel,CheckTheGameEnd total_play_time) {
+	public Rain(CheckTheGameEnd total_play_time, LinkedList<JLabel> words, LinkedList<Integer> randomMove) {
 		playTime = total_play_time;
-		this.rainPanel = rainPanel;
-		word_creat = new Word();
+		this.words = words;
+		this.randomMove = randomMove;
 	}
 
-	public void setWordPosition() {
-		JLabel tempLabel;
+	public void moveWord() {
+		try {
 
-		for (int i = 0; i < word_creat.words.size(); i++) {
-			tempLabel = new JLabel(word_creat.words.get(i));
-
-			tempLabel.setFont(new Font("Times", Font.BOLD, 12));
-			tempLabel.setForeground(Color.WHITE);
-			tempLabel.setBounds((int) (Math.random() * 450) + 50, -10, 150, 20);
-			tempLabel.setVisible(true);
-
-			words.add(tempLabel);
-			randomMove[i] = (int) (Math.random() * 20) + 10;
-			rainPanel.add(words.get(i));
+			for (int i = 0; i < words.size(); i++) {
+				words.get(i).setLocation(words.get(i).getX(), words.get(i).getY() + randomMove.get(i));
+				wordcheckTheDeadLine(i);
+			}
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+	}
 
-		GameChooseUI.mainFrame.add(rainPanel);
-		GameChooseUI.mainFrame.setVisible(true);
+	public void wordcheckTheDeadLine(int index) {
+		if (words.get(index).getY() > 550 && words.get(index).isVisible()) {
+			words.get(index).setVisible(false);
 
+			if (RainGame.lifeMark.isEmpty()) {
+				playTime.interrupt();
+			}
+			RainGame.lifeMark.poll().setVisible(false);
+		}
 	}
 
 	public void run() {
@@ -52,33 +46,5 @@ public class Rain extends Thread {
 		}
 	}
 
-	public void moveWord() {
-		 
-		try {
-			
-			for(int i=0;i<words.size();i++) {
-				words.get(i).setLocation(words.get(i).getX() ,words.get(i).getY() + randomMove[i]);
-				if(words.get(i).getY() > 550 && words.get(i).isVisible()) {
-					words.get(i).setVisible(false);
-					
-					if(RainGame.lifeMark.isEmpty()) {
-						playTime.interrupt();
-					}
-					RainGame.lifeMark.poll().setVisible(false);
-				}
-			}
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void checkTheDead(JLabel each) {
-		
-	}
-	
-	public void showHeart() {
-		
-	}
 
 }

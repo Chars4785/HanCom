@@ -1,6 +1,7 @@
 package AcidRain;
 
 import java.sql.*;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
@@ -14,7 +15,8 @@ public class DataBase extends JOptionPane {
 	Connection connection = null;
 	Statement statement = null;
 	ResultSet resultSet = null;
-
+	
+	
 	public DataBase() {
 		try {
 			Class.forName(DB_driverName);
@@ -173,5 +175,89 @@ public class DataBase extends JOptionPane {
 		
 		return name;
 	}
+	
+
+	public Vector<Vector<String>> View()
+	{
+		ResultSet rs = null;
+		Vector<Vector<String>> vector = new Vector<Vector<String>>();
+
+		try {
+			String queryString = "SELECT USER_ID, NAME, RAIN_SCORE, MINE_SCORE,TOTAL_SCORE FROM USER0 NATURAL JOIN SCORE";
+			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PW);
+
+			statement = connection.createStatement();
+			rs = statement.executeQuery(queryString);
+			
+			while(rs.next())
+			{
+				Vector<String> row = new Vector<String>();
+				row.add(rs.getString(1));
+				row.add(rs.getString(2));
+				row.add(rs.getString(3));
+				row.add(rs.getString(4));
+				row.add(rs.getString(5));
+				
+				vector.add(row);
+			}
+			
+		} catch (SQLException e) {
+			showMessageDialog(null, "입력오류", "ID존재", JOptionPane.WARNING_MESSAGE);
+		} finally {
+			closeDatabase();
+		}
+		
+		return vector;
+	}
+	
+	public void InsertScore(String strid, String score, int Gamenumber)
+	{
+		String queryString="";
+		System.out.println(strid+score+Gamenumber);
+
+		try {
+			
+			if(Gamenumber == 1)
+			{
+				queryString = "UPDATE SCORE SET RAIN_SCORE = "+"'"+score+"' + (SELECT RAIN_SCORE FROM SCORE WHERE USER_ID = '"+strid+"') WHERE USER_ID = '"+strid+"'";
+			}
+			else if(Gamenumber == 2)
+			{
+				queryString = "UPDATE SCORE SET MINE_SCORE = "+"'"+score+"' + (SELECT MINE_SCORE FROM SCORE WHERE USER_ID = '"+strid+"') WHERE USER_ID = '"+strid+"'";
+			}
+			
+			System.out.println(queryString);
+			totalScore(strid, score);
+			
+			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PW);
+			statement = connection.createStatement();
+			statement.executeUpdate(queryString);
+			
+		} catch (SQLException e) {
+			showMessageDialog(null, "입력오류", "ID존재", JOptionPane.WARNING_MESSAGE);
+		} finally {
+			closeDatabase();
+		}
+		
+	}
+	
+	public void totalScore(String strid, String score)
+	{
+
+		try {
+			String queryString = "UPDATE SCORE SET TOTAL_SCORE = "+"'"+score+"' + (SELECT TOTAL_SCORE FROM SCORE WHERE USER_ID = '"+strid+"') WHERE USER_ID = '"+strid+"'";
+			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PW);
+
+			statement = connection.createStatement();
+			statement.executeUpdate(queryString);
+			
+		} catch (SQLException e) {
+			showMessageDialog(null, "입력오류", "ID존재", JOptionPane.WARNING_MESSAGE);
+		} finally {
+			closeDatabase();
+		}
+		
+	}
+	
 
 }

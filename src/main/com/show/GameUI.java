@@ -12,11 +12,9 @@ import javax.swing.JPanel;
 import main.com.game.MineGame;
 
 public class GameUI {
-	int speed = 3000; // 기본 자동삭제 스피드
-	
 
 	JButton startButton, lowButton, highButton, midButton;
-	JPanel mineUI;
+	JPanel mainUIPanel;
 	ImageIcon icon, buttonIcon, buttonOnclick, lifeIcon, lowIcon, lowIconClick, midIcon, midIconClick, highIcon,
 			highIconClick;
 
@@ -38,7 +36,7 @@ public class GameUI {
 		lowButton = new JButton(lowIcon);
 		startButton = new JButton(buttonIcon);
 
-		mineUI = new JPanel() {
+		mainUIPanel = new JPanel() {
 			public void paintComponent(Graphics g) {
 				g.drawImage(icon.getImage(), 0, 0, null);
 				setOpaque(false); // 그림을 표시하게 설정,투명하게 조절
@@ -84,15 +82,15 @@ public class GameUI {
 		highButton.setFocusPainted(false);
 		highButton.setContentAreaFilled(false);
 
-		mineUI.add(startButton);
-		mineUI.add(lowButton);
-		mineUI.add(midButton);
-		mineUI.add(highButton);
-		mineUI.setVisible(true);
+		mainUIPanel.add(startButton);
+		mainUIPanel.add(lowButton);
+		mainUIPanel.add(midButton);
+		mainUIPanel.add(highButton);
+		mainUIPanel.setVisible(true);
 
-		GameChooseUI.mainFrame.getContentPane().add(mineUI, BorderLayout.CENTER);
-		mineUI.setLayout(null);
-		GameChooseUI.mainFrame.add(mineUI);
+		GameChooseUI.mainFrame.getContentPane().add(mainUIPanel, BorderLayout.CENTER);
+		mainUIPanel.setLayout(null);
+		GameChooseUI.mainFrame.add(mainUIPanel);
 		GameChooseUI.mainFrame.setVisible(true);
 	}
 
